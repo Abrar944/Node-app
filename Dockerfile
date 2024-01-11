@@ -21,6 +21,10 @@ RUN apk --update add \
     py3-pip \
     && pip3 install --upgrade pip \
     && pip3 install awscli
+    RUN aws --version
+    RUN echo $PATH
+    RUN pip3 install --upgrade awscli
+
 
 
 EXPOSE 3000
