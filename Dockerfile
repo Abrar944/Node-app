@@ -1,34 +1,17 @@
-FROM node:16-alpine
+FROM node:16-alpine AS build
 
-# Install AWS CLI dependencies
-RUN apk --update add \
-    python3 \
-    py3-pip
-
-# Install AWS CLI
-RUN pip3 install --upgrade pip \
-    && pip3 install awscli
-
-# Install Docker CLI dependencies
-RUN apk add --update docker-cli
-
-# Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+COPY ./app/package*.json ./
+RUN npm install
 
-# Install Node.js dependencies
-RUN npm install --only=production
+# Second stage for the actual runtime
+FROM node:16-alpine
 
-# Copy the application code
-COPY . .
+WORKDIR /usr/src/app
 
-# Expose the port your app will run on
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY ./app .
+
 EXPOSE 3000
-
-# Command to run the application
 CMD ["npm", "start"]
-
-
-
