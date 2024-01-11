@@ -23,6 +23,9 @@ RUN apk --update add \
     && pip3 install awscli
     RUN aws --version
     RUN echo $PATH
+    RUN echo "Current directory: $(pwd)"
+    RUN ls -la
+    RUN which aws
     RUN pip3 install --upgrade awscli
 
 
