@@ -13,6 +13,16 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY ./app .
 
+FROM node:16-alpine
+
+# Install AWS CLI
+RUN apk --update add \
+    python3 \
+    py3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install awscli
+
+
 EXPOSE 3000
 CMD ["npm", "start"]
 
